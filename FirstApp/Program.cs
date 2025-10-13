@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 
 namespace FirstApp
 {
@@ -6,15 +7,19 @@ namespace FirstApp
     {
         static void Main(string[] args)
         {
-            string MyName = "Jane";
-            byte MyAge = 27;
-            bool HaveIApet = true;
-            double MyShoeSize = 37.5;
-
-            Console.WriteLine("My name is " + MyName);
-            Console.WriteLine("MyAge " + MyAge);
-            Console.WriteLine("Do I have a pet? " + HaveIApet);
-            Console.WriteLine("My shoe size is " + MyShoeSize);
+            Console.Write("Введите имя: ");
+            var name = Console.ReadLine();
+            Console.Write("Введите возраст: ");
+            var age = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Введите дату рождения: ");
+            var birthdate = Console.ReadLine();
+            Console.WriteLine("Вас зовут: {0}, ваш возраст: {1}, дата вашего рождения: {2}", name, age, birthdate);
         }
+    }
+    enum Semaphore : int
+    {
+        Red = 100,
+        Yellow = 200,
+        Green = 300,
     }
 }
