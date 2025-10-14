@@ -7,49 +7,24 @@ namespace FirstApp
     {
         static void Main(string[] args)
         {
-            int k = 0;
+            var arr = new int[] { 5, 6, 9, 1, 2, 3, 4 };
 
-            while (true)
+            for (int i = 0; i < arr.Length; i++)
             {
-                Console.WriteLine("Напишите свой любимый цвет на английском с маленькой буквы");
-                Console.WriteLine(k);
-
-                var text = Console.ReadLine();
-
-                if (text == "stop")
+                for (int j = i + 1; j < arr.Length; j++)
                 {
-                    Console.WriteLine("Цикл остановлен");
-                    break;
+                    if (arr[i]<=arr[j]) continue;
+
+                    int oldIndexValue = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = oldIndexValue;
                 }
+                    
+            }
 
-                switch (text)
-                {
-                    case "red":
-                        Console.BackgroundColor = ConsoleColor.Red;
-                        Console.ForegroundColor = ConsoleColor.Black;
-
-                        Console.WriteLine("Your color is red!");
-                        break;
-
-                    case "green":
-                        Console.BackgroundColor = ConsoleColor.Green;
-                        Console.ForegroundColor = ConsoleColor.Black;
-
-                        Console.WriteLine("Your color is green!");
-                        break;
-
-                    case "cyan":
-                        Console.BackgroundColor = ConsoleColor.Cyan;
-                        Console.ForegroundColor = ConsoleColor.Black;
-
-                        Console.WriteLine("Your color is cyan!");
-                        break;
-                    default:
-                        continue;
-                }
-
-                k++;
-
+            foreach (var item in arr)
+            {
+                Console.Write(item);
             }
         }
     }
