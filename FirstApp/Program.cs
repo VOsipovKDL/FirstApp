@@ -7,31 +7,49 @@ namespace FirstApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Напишите свой любимый цвет на английском с маленькой буквы");
+            int k = 0;
 
-            var color = Console.ReadLine();
-
-            if (color == "red")
+            while (true)
             {
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine("Напишите свой любимый цвет на английском с маленькой буквы");
+                Console.WriteLine(k);
 
-                Console.WriteLine("Your color is red!");
-            }
+                var text = Console.ReadLine();
 
-            else if (color == "green")
-            {
-                Console.BackgroundColor = ConsoleColor.Green;
-                Console.ForegroundColor = ConsoleColor.Black;
+                if (text == "stop")
+                {
+                    Console.WriteLine("Цикл остановлен");
+                    break;
+                }
 
-                Console.WriteLine("Your color is green!");
-            }
-            else
-            {
-                Console.BackgroundColor = ConsoleColor.Cyan;
-                Console.ForegroundColor = ConsoleColor.Black;
+                switch (text)
+                {
+                    case "red":
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.ForegroundColor = ConsoleColor.Black;
 
-                Console.WriteLine("Your color is cyan!");
+                        Console.WriteLine("Your color is red!");
+                        break;
+
+                    case "green":
+                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.Black;
+
+                        Console.WriteLine("Your color is green!");
+                        break;
+
+                    case "cyan":
+                        Console.BackgroundColor = ConsoleColor.Cyan;
+                        Console.ForegroundColor = ConsoleColor.Black;
+
+                        Console.WriteLine("Your color is cyan!");
+                        break;
+                    default:
+                        continue;
+                }
+
+                k++;
+
             }
         }
     }
