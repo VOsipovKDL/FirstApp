@@ -8,13 +8,8 @@ namespace FirstApp
     {
         public static void Main(string[] args)
         {
-            int[] numberArr = GetArrayFromConsole();
-            SortArray(in numberArr, out int[] sortedasc, out int[] sorteddesc);
-
-            Console.WriteLine("***");
-
-            ShowArray(sortedasc);
-            ShowArray(sorteddesc);
+            string phrase = "Привет лес";
+            Echo(phrase, 5);
         }
 
         static string GetColorAndShow(string userName, int age)
@@ -150,6 +145,23 @@ namespace FirstApp
         static void BigDataOperation(int[] arr)
         {
             arr[0] = 4;
+        }
+
+        static void Echo(string phrase, int deep)
+        {
+            var modif = phrase;
+
+            Console.WriteLine(modif);
+
+            if (modif.Length > 2)
+            {
+                modif = modif.Remove(0, 2);
+            }
+
+            if (deep > 1)
+            {
+                Echo(modif, deep - 1);
+            }
         }
 
         enum Semaphore : int
