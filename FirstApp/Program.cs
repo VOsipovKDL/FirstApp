@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FirstApp
@@ -58,12 +60,12 @@ namespace FirstApp
             User.petNameArray = new string[User.petCount];
             if (User.hasPet)
             {
-                GuarantedAnswerFromConsole("Сколько у вас питомцев?: ", false, 5, out User.petCount);
+                GuarantedAnswerFromConsole("Сколько у вас питомцев?: ", false, 10, out User.petCount);
                 User.petNameArray = GetPetNameArray(User.petCount);
             }
 
             User.favColorCount = 0;
-            GuarantedAnswerFromConsole("Сколько цветов вам нравится?: ", true, 5, out User.favColorCount);
+            GuarantedAnswerFromConsole("Сколько цветов вам нравится?: ", true, 10, out User.favColorCount);
             User.favColorArray = GetFavColorArray(User.favColorCount);
         }
 
@@ -147,7 +149,7 @@ namespace FirstApp
                 Console.Write(question);
                 answer = Console.ReadLine();
 
-                if (answer.Any(c => char.IsLetter(c))) break;
+                if (Regex.IsMatch(answer, "^[а-яА-яЁё]+$")) break;
             }
         }
     }
