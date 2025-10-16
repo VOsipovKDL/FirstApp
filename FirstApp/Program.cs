@@ -11,37 +11,59 @@ namespace FirstApp
             (string name, string lastName, byte age, bool hasPet, byte petCount, string[] petNameArray, byte favColorCount, string[] favColorArray) User;
             GetUserInfo(out User);
 
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+
+            Console.WriteLine();
             Console.WriteLine("Вас зовут: {0} {1}, ваш возраст: {2}", User.name, User.lastName, User.age);
+
             if (User.hasPet)
             {
-                Console.WriteLine("У вас есть питомцы: {0} шт", User.petCount);
-                foreach (var item in User.petNameArray) Console.WriteLine(item);
+                if (User.petCount==1)
+                {
+                    Console.WriteLine("У вас есть питомец. Его зовут: {1}", User.petCount, User.petNameArray.First());
+                } else
+                {
+                    Console.WriteLine("У вас есть несколько питомцев: {0} шт. Вот их клички: ", User.petCount);
+                    foreach (var item in User.petNameArray) Console.WriteLine(item);
+                }
             }
 
-            Console.WriteLine("Вы указали цвета, которые вам нравятся: {0} шт", User.favColorCount);
-            foreach (var item in User.favColorArray) Console.WriteLine(item);
+            if (User.favColorArray.Length>0)
+            {
+                if (User.favColorArray.Length==1)
+                {
+                    Console.WriteLine("У вас есть любимый цвет: {0}", User.favColorArray.First());
+                }
+                else
+                {
+                    Console.WriteLine("Вам нравится несколько цветов: {0} шт. Вот они: ", User.favColorCount);
+                    foreach (var item in User.favColorArray) Console.WriteLine(item);
+                }
+            }
+
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         static void GetUserInfo(out (string name, string lastName, byte age, bool hasPet, byte petCount, string[] petNameArray, byte favColorCount, string[] favColorArray) User)
         {
-            Console.Write("Укажите ваше имя: ");
-            User.name = Console.ReadLine();
+            GuarantedAnswerFromConsole("Укажите ваше имя: ", out User.name);
+            GuarantedAnswerFromConsole("Укажите вашу фамилию: ", out User.lastName);
 
-            Console.Write("Укажите вашу фамилию: ");
-            User.lastName = Console.ReadLine();
-
-            User.age = (byte)GuarantedAnswerFromConsole("Укажите ваш возраст: ", false);
-            User.hasPet = GuarantedAnswerFromConsole("Есть ли у вас питомцы? Да/Нет: ");
+            GuarantedAnswerFromConsole("Укажите ваш возраст: ", false, 200, out User.age);
+            GuarantedAnswerFromConsole("Есть ли у вас питомцы? Да/Нет: ", out User.hasPet);
 
             User.petCount = 0;
             User.petNameArray = new string[User.petCount];
-            if (User.hasPet) {
-                User.petCount = (byte)GuarantedAnswerFromConsole("Сколько у вас питомцев?: ", false);
+            if (User.hasPet)
+            {
+                GuarantedAnswerFromConsole("Сколько у вас питомцев?: ", false, 5, out User.petCount);
                 User.petNameArray = GetPetNameArray(User.petCount);
             }
 
             User.favColorCount = 0;
-            User.favColorCount = (byte)GuarantedAnswerFromConsole("Сколько цветов вам нравится?: ", true);
+            GuarantedAnswerFromConsole("Сколько цветов вам нравится?: ", true, 5, out User.favColorCount);
             User.favColorArray = GetFavColorArray(User.favColorCount);
         }
 
@@ -52,10 +74,7 @@ namespace FirstApp
             if (petCount==0) return petNameArray;
 
             for (int i = 0; i<petNameArray.Length; i++)
-            {
-                Console.Write("Введите имя вашего питомца #{0}: ",i+1);
-                petNameArray[i] = Console.ReadLine();
-            }
+                GuarantedAnswerFromConsole("Введите имя вашего питомца #"+(i+1)+" ", out petNameArray[i]);
 
             return petNameArray;
         }
@@ -67,10 +86,7 @@ namespace FirstApp
             if (favColorCount==0) return favColorArray;
 
             for (int i = 0; i<favColorArray.Length; i++)
-            {
-                Console.Write("Введите цвет #{0}: ", i+1);
-                favColorArray[i] = Console.ReadLine();
-            }
+                GuarantedAnswerFromConsole("Введите цвет #"+(i+1)+" ", out favColorArray[i]);
 
             return favColorArray;
         }
@@ -80,10 +96,8 @@ namespace FirstApp
             return int.TryParse(Console.ReadLine(), out correctNumber);
         }
 
-        static bool GuarantedAnswerFromConsole(string question)
+        static void GuarantedAnswerFromConsole(string question, out bool answer)
         {
-            bool answer;
-
             while (true)
             {
                 Console.Write(question);
@@ -100,215 +114,41 @@ namespace FirstApp
                     break;
                 }
             }
-
-            return answer;
         }
 
-        static int GuarantedAnswerFromConsole(string question, bool hasZero)
+        static void GuarantedAnswerFromConsole(string question, bool hasZero, byte maxValue, out byte answer)
         {
-            int answer;
-
             while (true)
             {
                 Console.Write(question);
                 int temp;
                 bool isNumeric = GetIsCorrectNumberFromConsole(out temp);
 
-                if ((isNumeric)&&(temp>0))
+                if ((isNumeric)&&((temp>0)&&(temp<maxValue)))
                 {
-                    answer = temp;
+                    answer = (byte)temp;
                     break;
                 }
                 else if ((isNumeric)&&(temp==0))
                 {
                     if (hasZero)
                     {
-                        answer = temp;
+                        answer = (byte)temp;
                         break;
                     }
                 }
             }
-
-            return answer;
         }
 
-        static string GetColorAndShow(string userName, int age)
+        static void GuarantedAnswerFromConsole(string question, out string answer)
         {
-            Console.WriteLine("{0}, возраст: {1} \n Напишите какой нибудь цвет, который вам нравится на английском языке с маленькой буквы", userName, age);
-            var color = Console.ReadLine();
-
-            switch (color)
+            while (true)
             {
-                case "red":
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.ForegroundColor = ConsoleColor.Black;
+                Console.Write(question);
+                answer = Console.ReadLine();
 
-                    Console.WriteLine("Your color is red!");
-                    break;
-
-                case "green":
-                    Console.BackgroundColor = ConsoleColor.Green;
-                    Console.ForegroundColor = ConsoleColor.Black;
-
-                    Console.WriteLine("Your color is green!");
-                    break;
-                case "cyan":
-                    Console.BackgroundColor = ConsoleColor.Cyan;
-                    Console.ForegroundColor = ConsoleColor.Black;
-
-                    Console.WriteLine("Your color is cyan!");
-                    break;
-                default:
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-                    Console.ForegroundColor = ConsoleColor.Red;
-
-                    Console.WriteLine("Your color is yellow!");
-                    break;
+                if (answer.Any(c => char.IsLetter(c))) break;
             }
-
-            return color;
-        }
-
-        static void ShowColors(params string[] favcolors)
-        {
-            Console.WriteLine("Ваши любимые цвета:");
-            foreach (var color in favcolors)
-            {
-                Console.WriteLine(color);
-            }
-        }
-
-        static int[] GetArrayFromConsole(int num = 3)
-        {
-            var result = new int[num];
-
-            for (int i = 0; i < result.Length; i++)
-            {
-                Console.WriteLine("Введите элемент массива номер {0}", i + 1);
-                result[i] = int.Parse(Console.ReadLine());
-            }
-
-            return result;
-        }
-
-        static void SortArray(in int[] array, out int[] sortedasc, out int[] sorteddesc)
-        {
-            int[] cloneAsc = (int[]) array.Clone();
-            sortedasc   = SortArrayAsc(cloneAsc);
-            ShowArray(sortedasc);
-
-            sorteddesc  = SortArrayDesc(array);
-            ShowArray(sorteddesc);
-        }
-
-        static int[] SortArrayAsc(int[] array)
-        {
-            int temp = 0;
-
-            for (int i = 0; i < array.Length; i++)
-            {
-                for (int j = i + 1; j < array.Length; j++)
-                {
-                    if (array[i]>array[j])
-                    {
-                        temp = array[i];
-                        array[i] = array[j];
-                        array[j] = temp;
-                    }
-                }
-            }
-
-            return array;
-        }
-
-        static int[] SortArrayDesc(int[] array)
-        {
-            int temp = 0;
-
-            for (int i = 0; i < array.Length; i++)
-            {
-                for (int j = i + 1; j < array.Length; j++)
-                {
-                    if (array[i]<array[j])
-                    {
-                        temp = array[i];
-                        array[i] = array[j];
-                        array[j] = temp;
-                    }
-                }
-            }
-
-            return array;
-        }
-
-        static void ShowArray(int[] arr, bool isSort = false)
-        {
-            //if (isSort) arr = SortArrayAsc(arr);
-
-            foreach (var item in arr) Console.WriteLine(item);
-        }
-
-        static void GetName(out string name)
-        {
-            Console.Write("Введите имя: ");
-            name = Console.ReadLine();
-
-        }
-
-        static void GetAge(ref int age)
-        {
-            Console.Write("Введите ваш возраст: ");
-            age = Convert.ToInt32(Console.ReadLine());
-
-        }
-
-        static void BigDataOperation(int[] arr)
-        {
-            arr[0] = 4;
-        }
-
-        static void Echo(string phrase, int deep)
-        {
-            var modif = phrase;
-
-            Console.BackgroundColor = (ConsoleColor)deep;
-            Console.WriteLine(modif);
-
-            if (modif.Length > 2) modif = modif.Remove(0, 2);
-
-            if (deep > 1) Echo(modif, deep - 1);
-        }
-
-        static decimal Factorial(int x)
-        {
-            if (x == 0)
-            {
-                return 1;
-            }
-            else
-            {
-                return x * Factorial(x - 1);
-            }
-        }
-
-        private static int PowerUp(int N, byte pow)
-        {
-            if (pow==0)
-            {
-                return 1;
-            }
-            else if (pow==1)
-            {
-                return N;
-            }
-
-            return N * PowerUp(N, --pow);
-        }
-
-        enum consoleAnswerType : int
-        {
-            Int,
-            Bool,
         }
     }
 }
