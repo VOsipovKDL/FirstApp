@@ -10,8 +10,7 @@ namespace FirstApp
     {
         public static void Main(string[] args)
         {
-            (string name, string lastName, byte age, bool hasPet, byte petCount, string[] petNameArray, byte favColorCount, string[] favColorArray) User;
-            GetUserInfo(out User);
+            var User = GetUserInfo();
 
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
@@ -48,25 +47,31 @@ namespace FirstApp
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        static void GetUserInfo(out (string name, string lastName, byte age, bool hasPet, byte petCount, string[] petNameArray, byte favColorCount, string[] favColorArray) User)
+        static (string name, string lastName, byte age, bool hasPet, byte petCount, string[] petNameArray, byte favColorCount, string[] favColorArray) GetUserInfo()
         {
-            GuarantedAnswerFromConsole("Укажите ваше имя: ", out User.name);
-            GuarantedAnswerFromConsole("Укажите вашу фамилию: ", out User.lastName);
+            string name;
+            GuarantedAnswerFromConsole("Укажите ваше имя: ", out name);
+            string lastName;
+            GuarantedAnswerFromConsole("Укажите вашу фамилию: ", out lastName);
 
-            GuarantedAnswerFromConsole("Укажите ваш возраст: ", false, 200, out User.age);
-            GuarantedAnswerFromConsole("Есть ли у вас питомцы? Да/Нет: ", out User.hasPet);
+            byte age;
+            GuarantedAnswerFromConsole("Укажите ваш возраст: ", false, 200, out age);
+            bool hasPet = false;
+            GuarantedAnswerFromConsole("Есть ли у вас питомцы? Да/Нет: ", out hasPet);
 
-            User.petCount = 0;
-            User.petNameArray = new string[User.petCount];
-            if (User.hasPet)
+            byte petCount = 0;
+            string[] petNameArray = new string[petCount];
+            if (hasPet)
             {
-                GuarantedAnswerFromConsole("Сколько у вас питомцев?: ", false, 10, out User.petCount);
-                User.petNameArray = GetPetNameArray(User.petCount);
+                GuarantedAnswerFromConsole("Сколько у вас питомцев?: ", false, 10, out petCount);
+                petNameArray = GetPetNameArray(petCount);
             }
 
-            User.favColorCount = 0;
-            GuarantedAnswerFromConsole("Сколько цветов вам нравится?: ", true, 10, out User.favColorCount);
-            User.favColorArray = GetFavColorArray(User.favColorCount);
+            byte favColorCount = 0;
+            GuarantedAnswerFromConsole("Сколько цветов вам нравится?: ", true, 10, out favColorCount);
+            string[] favColorArray = GetFavColorArray(favColorCount);
+
+            return (name, lastName, age, hasPet, petCount, petNameArray, favColorCount, favColorArray);
         }
 
         static string[] GetPetNameArray(byte petCount)
