@@ -3,12 +3,35 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using UtilityLibraries;
 
 namespace FirstApp
 {
     class Program
     {
         public static void Main(string[] args)
+        {
+            var department = GetCurrentDepartment();
+
+            Console.WriteLine(department.Company?.Name.StartsWithUpper());
+            /*if ((department?.Company?.Type == "Банк")&&(department?.City?.Name == "Санкт-Петербург"))
+            {
+                string companyName = department.Company?.Name ?? "Неизвестная компания";
+                Console.WriteLine("У банка {0} есть отделение в Санкт-Петербурге", companyName);
+            }*/
+
+        }
+
+        static Department GetCurrentDepartment()
+        {
+            Company company = new Company { Type = "Банк" , Name = "igh"};
+            City city = new City { Name = "Санкт-Петербург" };
+            Department department = new Department { Company = company, City = city };
+
+            return department;
+        }
+
+        public static void Questionnaire(string[] args)
         {
             var User = GetUserInfo();
 
@@ -157,5 +180,70 @@ namespace FirstApp
                 if (Regex.IsMatch(answer, "^[а-яА-яЁё]+$")) break;
             }
         }
+    }
+
+    class Pen
+    {
+        public string color;
+        public int cost;
+
+        public Pen()
+        {
+            color   = "Черынй";
+            cost    = 100;
+        }
+
+        public Pen(string penColor, int penCost)
+        {
+            color   = penColor;
+            cost    = penCost;
+        }
+    }
+
+    class Rectangle
+    {
+        public int a;
+        public int b;
+
+        public Rectangle()
+        {
+            a = 6;
+            b = 4;
+        }
+
+        public Rectangle(int side)
+        {
+            a = side;
+            b = side;
+        }
+
+        public Rectangle(int sideA, int sideB)
+        {
+            a = sideA;
+            b = sideB;
+        }
+
+        public int Square()
+        {
+            return a * b;
+        }
+    }
+
+    class Company
+    {
+        public string Type;
+        public string Name;
+    }
+
+    class Department
+    {
+        public Company Company;
+        public City City;
+        public int Load;
+    }
+
+    class City
+    {
+        public string Name;
     }
 }
